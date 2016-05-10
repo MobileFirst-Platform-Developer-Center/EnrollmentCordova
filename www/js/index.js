@@ -31,9 +31,8 @@ function wlCommonInit(){
     document.getElementById("getBalance").addEventListener("click", getBalance);
     document.getElementById("getTransactions").addEventListener("click", getTransactions);
     document.getElementById("enrollButton").addEventListener("click", enroll);
-    document.getElementById("logoutButton").addEventListener("click", logout);
-    
-    var userLoginChallengeHandler = UserLoginChallengeHandler();
+    // document.getElementById("logoutButton").addEventListener("click", logout);
+
     isEnrolled();
 }
 
@@ -55,6 +54,22 @@ function getpublicData() {
 
 function getpublicData() {
     var resourceRequest = new WLResourceRequest(
+        "/adapters/Enrollment/publicData",
+        WLResourceRequest.GET
+    );
+
+    resourceRequest.send().then(
+        function(response) {
+            document.getElementById("responseTextarea").value = response.responseText;
+        },
+        function(response) {
+            WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
+        }
+    );    
+}
+
+function getBalance() {
+    var resourceRequest = new WLResourceRequest(
         "/adapters/Enrollment/balance",
         WLResourceRequest.GET
     );
@@ -69,6 +84,7 @@ function getpublicData() {
     );    
 }
 
+
 function isEnrolled() {
     var resourceRequest = new WLResourceRequest(
         "/adapters/Enrollment/isEnrolled/",
@@ -78,12 +94,14 @@ function isEnrolled() {
     resourceRequest.send().then(
         function(response) {
             document.getElementById("wrapper").style.display = 'block';
-            document.getElementById("enrollButton").style.display = 'none';
-            document.getElementById("logoutButton").style.display = 'block';
+            document.getElementById("logoutButton").style.display = 'none';
             
             if (response.responseText == "true") {    
                 document.getElementById("getBalance").style.display = 'inline-block';
                 document.getElementById("getTransactions").style.display = 'inline-block';
+                document.getElementById("logoutButton").style.display = 'block';
+            } else {
+                document.getElementById("enrollButton").style.display = 'block';
             }
         },
         function(response) {
@@ -107,6 +125,8 @@ function enroll() {
                     document.getElementById("appDiv").style.display = 'block';
                     document.getElementById("getBalance").style.display = 'inline-block';
                     document.getElementById("getTransactions").style.display = 'inline-block';
+                    document.getElementById("enrollButton").style.display = 'none';
+                    document.getElementById("logoutButton").style.display = 'block';
                 },
                 function(response) {
                     WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
@@ -120,14 +140,14 @@ function enroll() {
 }
 
 // function logout() {
-//     function logout() {
 //     WLAuthorizationManager.logout(securityCheckName).then(
 //         function () {
-//             WL.Logger.debug("logout onSuccess");
+//             WL.Logger.debug("Logout succeeded.");
+//             
 //             location.reload();
 //         },
 //         function (response) {
-//             WL.Logger.debug("logout onFailure: " + JSON.stringify(response));
-//         });
-//     }
+//             WL.Logger.debug("Logout failure: " + JSON.stringify(response));
+//         }
+//     );
 // }

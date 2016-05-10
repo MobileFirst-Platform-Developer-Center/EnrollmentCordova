@@ -15,11 +15,10 @@
 */
 var UserLoginChallengeHandler = function() {
     var isChallenged = false;
-    var securityCheckName = 'UserLogin';
+    var securityCheckName = 'EnrollmentUserLogin';
     var userLoginChallengeHandler = WL.Client.createWLChallengeHandler(securityCheckName);
 
     document.getElementById("login").addEventListener("click", login);
-    // document.getElementById("cancel").addEventListener("click", cancel);
 
     userLoginChallengeHandler.securityCheckName = securityCheckName;
 
