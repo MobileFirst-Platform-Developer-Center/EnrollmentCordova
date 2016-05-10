@@ -48,7 +48,8 @@ h1 {
 }
 
 #headerTitle {
-    margin-left: 57px;
+    /*margin-left: 57px;*/
+    text-align: center;
 }
 
 #enrollButton,#logoutButton {

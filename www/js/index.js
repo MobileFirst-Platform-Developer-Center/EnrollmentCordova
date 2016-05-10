@@ -52,22 +52,6 @@ function getpublicData() {
     );    
 }
 
-function getpublicData() {
-    var resourceRequest = new WLResourceRequest(
-        "/adapters/Enrollment/publicData",
-        WLResourceRequest.GET
-    );
-
-    resourceRequest.send().then(
-        function(response) {
-            document.getElementById("responseTextarea").value = response.responseText;
-        },
-        function(response) {
-            WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
-        }
-    );    
-}
-
 function getBalance() {
     var resourceRequest = new WLResourceRequest(
         "/adapters/Enrollment/balance",
@@ -84,6 +68,9 @@ function getBalance() {
     );    
 }
 
+function getTransactions() {
+    
+}
 
 function isEnrolled() {
     var resourceRequest = new WLResourceRequest(
@@ -95,6 +82,7 @@ function isEnrolled() {
         function(response) {
             document.getElementById("wrapper").style.display = 'block';
             document.getElementById("logoutButton").style.display = 'none';
+            document.getElementById("headerTitle").style.marginLeft = '57px';
             
             if (response.responseText == "true") {    
                 document.getElementById("getBalance").style.display = 'inline-block';
@@ -113,7 +101,7 @@ function isEnrolled() {
 function enroll() {
     WLAuthorizationManager.obtainAccessToken("setPinCode").then(
         function () {            
-            var pinCode = prompt("Set Pin Code", "");
+            var pinCode = prompt("Set a pin code", "");
             var resourceRequest = new WLResourceRequest(
                 "/adapters/Enrollment/setPinCode/" + pinCode,
                 WLResourceRequest.POST
