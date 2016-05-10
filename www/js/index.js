@@ -28,15 +28,106 @@ var wlInitOptions = {
 // Called automatically after MFP framework initialization by WL.Client.init(wlInitOptions).
 function wlCommonInit(){
     document.getElementById("getPublicData").addEventListener("click", getpublicData);
-    document.getElementById("enrollButton").addEventListener("click", enrollUser);
-    // document.getElementById("getBalance").addEventListener("click", getBalance);
-    // document.getElementById("getTransactions").addEventListener("click", getTransactions);
+    document.getElementById("getBalance").addEventListener("click", getBalance);
+    document.getElementById("getTransactions").addEventListener("click", getTransactions);
+    document.getElementById("enrollButton").addEventListener("click", enroll);
+    document.getElementById("logoutButton").addEventListener("click", logout);
+    
+    var userLoginChallengeHandler = UserLoginChallengeHandler();
+    isEnrolled();
 }
 
 function getpublicData() {
-    document.getElementById("responseTextarea").value = "Lorem";
+    var resourceRequest = new WLResourceRequest(
+        "/adapters/Enrollment/publicData",
+        WLResourceRequest.GET
+    );
+
+    resourceRequest.send().then(
+        function(response) {
+            document.getElementById("responseTextarea").value = response.responseText;
+        },
+        function(response) {
+            WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
+        }
+    );    
 }
 
-function enrollUser() {
-    alert("Enroll User button tapped");
+function getpublicData() {
+    var resourceRequest = new WLResourceRequest(
+        "/adapters/Enrollment/balance",
+        WLResourceRequest.GET
+    );
+
+    resourceRequest.send().then(
+        function(response) {
+            document.getElementById("responseTextarea").value = response.responseText;
+        },
+        function(response) {
+            WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
+        }
+    );    
 }
+
+function isEnrolled() {
+    var resourceRequest = new WLResourceRequest(
+        "/adapters/Enrollment/isEnrolled/",
+        WLResourceRequest.GET
+    );
+    
+    resourceRequest.send().then(
+        function(response) {
+            document.getElementById("wrapper").style.display = 'block';
+            document.getElementById("enrollButton").style.display = 'none';
+            document.getElementById("logoutButton").style.display = 'block';
+            
+            if (response.responseText == "true") {    
+                document.getElementById("getBalance").style.display = 'inline-block';
+                document.getElementById("getTransactions").style.display = 'inline-block';
+            }
+        },
+        function(response) {
+            WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
+        }
+    );    
+}
+
+function enroll() {
+    WLAuthorizationManager.obtainAccessToken("setPinCode").then(
+        function () {            
+            var pinCode = prompt("Set Pin Code", "");
+            var resourceRequest = new WLResourceRequest(
+                "/adapters/Enrollment/setPinCode/" + pinCode,
+                WLResourceRequest.POST
+            );
+            
+            resourceRequest.send().then(
+                function() {
+                    document.getElementById("loginDiv").style.display = 'none';
+                    document.getElementById("appDiv").style.display = 'block';
+                    document.getElementById("getBalance").style.display = 'inline-block';
+                    document.getElementById("getTransactions").style.display = 'inline-block';
+                },
+                function(response) {
+                    WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
+                }
+            );  
+        },
+        function (response) {
+            WL.Logger.debug("Failed requesting an access token:" + JSON.stringify(response));
+        }
+    );
+}
+
+// function logout() {
+//     function logout() {
+//     WLAuthorizationManager.logout(securityCheckName).then(
+//         function () {
+//             WL.Logger.debug("logout onSuccess");
+//             location.reload();
+//         },
+//         function (response) {
+//             WL.Logger.debug("logout onFailure: " + JSON.stringify(response));
+//         });
+//     }
+// }
