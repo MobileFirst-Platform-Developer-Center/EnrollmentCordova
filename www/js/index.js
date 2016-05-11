@@ -31,7 +31,7 @@ function wlCommonInit(){
     document.getElementById("getBalance").addEventListener("click", getBalance);
     document.getElementById("getTransactions").addEventListener("click", getTransactions);
     document.getElementById("enrollButton").addEventListener("click", enroll);
-    // document.getElementById("logoutButton").addEventListener("click", logout);
+    document.getElementById("logoutButton").addEventListener("click", logout);
 
     isEnrolled();
 }
@@ -127,15 +127,15 @@ function enroll() {
     );
 }
 
-// function logout() {
-//     WLAuthorizationManager.logout(securityCheckName).then(
-//         function () {
-//             WL.Logger.debug("Logout succeeded.");
-//             
-//             location.reload();
-//         },
-//         function (response) {
-//             WL.Logger.debug("Logout failure: " + JSON.stringify(response));
-//         }
-//     );
-// }
+function logout() {
+    // WLAuthorizationManager.logout(securityCheckName).then(
+    //     function () {
+    //         WL.Logger.debug("Logout succeeded.");
+    //         
+    //         location.reload();
+    //     },
+    //     function (response) {
+    //         WL.Logger.debug("Logout failure: " + JSON.stringify(response));
+    //     }
+    // );
+}

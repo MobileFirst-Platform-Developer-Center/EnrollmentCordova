@@ -17,11 +17,10 @@ var UserLoginChallengeHandler = function() {
     var isChallenged = false;
     var securityCheckName = 'EnrollmentUserLogin';
     var userLoginChallengeHandler = WL.Client.createWLChallengeHandler(securityCheckName);
-
-    document.getElementById("login").addEventListener("click", login);
-
+    
+    document.getElementById("loginButton").addEventListener("click", login);
+    
     userLoginChallengeHandler.securityCheckName = securityCheckName;
-
     userLoginChallengeHandler.handleChallenge = function(challenge) {
         WL.Logger.debug("handleChallenge");
         document.getElementById("appDiv").style.display = 'none';
@@ -69,17 +68,6 @@ var UserLoginChallengeHandler = function() {
                 });
         }
     }
-
-    // function cancel() {
-    // WLAuthorizationManager.logout(securityCheckName).then(
-    //     function () {
-    //         WL.Logger.debug("cancel onSuccess");
-    //         location.reload();
-    //     },
-    //     function (response) {
-    //         WL.Logger.debug("cancel onFailure: " + JSON.stringify(response));
-    //     });
-    // }
 
     return userLoginChallengeHandler;
 };
