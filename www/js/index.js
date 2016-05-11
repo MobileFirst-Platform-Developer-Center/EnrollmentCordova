@@ -33,6 +33,7 @@ function wlCommonInit(){
     document.getElementById("enrollButton").addEventListener("click", enroll);
     document.getElementById("logoutButton").addEventListener("click", logout);
 
+    var userLoginChallengeHandler = UserLoginChallengeHandler();
     isEnrolled();
 }
 
@@ -63,13 +64,25 @@ function getBalance() {
             document.getElementById("responseTextarea").value = response.responseText;
         },
         function(response) {
-            WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
+            WL.Logger.debug("Error writing balance: " + JSON.stringify(response));
         }
     );    
 }
 
 function getTransactions() {
-    
+    var resourceRequest = new WLResourceRequest(
+        "/adapters/Enrollment/transactions",
+        WLResourceRequest.GET
+    );
+
+    resourceRequest.send().then(
+        function(response) {
+            document.getElementById("responseTextarea").value = response.responseText;
+        },
+        function(response) {
+            WL.Logger.debug("Error writing transactions: " + JSON.stringify(response));
+        }
+    );    
 }
 
 function isEnrolled() {
@@ -84,7 +97,7 @@ function isEnrolled() {
             document.getElementById("logoutButton").style.display = 'none';
             document.getElementById("headerTitle").style.marginLeft = '57px';
             
-            if (response.responseText == "true") {    
+            if (response.responseText == "true") {  
                 document.getElementById("getBalance").style.display = 'inline-block';
                 document.getElementById("getTransactions").style.display = 'inline-block';
                 document.getElementById("logoutButton").style.display = 'block';
@@ -100,7 +113,7 @@ function isEnrolled() {
 
 function enroll() {
     WLAuthorizationManager.obtainAccessToken("setPinCode").then(
-        function () {            
+        function () {       
             var pinCode = prompt("Set a pin code", "");
             var resourceRequest = new WLResourceRequest(
                 "/adapters/Enrollment/setPinCode/" + pinCode,
@@ -128,7 +141,7 @@ function enroll() {
 }
 
 function logout() {
-    // WLAuthorizationManager.logout(securityCheckName).then(
+    // WLAuthorizationManager.logout("isEnrolled").then(
     //     function () {
     //         WL.Logger.debug("Logout succeeded.");
     //         
