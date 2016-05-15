@@ -141,14 +141,38 @@ function enroll() {
 }
 
 function logout() {
-    // WLAuthorizationManager.logout("isEnrolled").then(
-    //     function () {
-    //         WL.Logger.debug("Logout succeeded.");
-    //         
-    //         location.reload();
-    //     },
-    //     function (response) {
-    //         WL.Logger.debug("Logout failure: " + JSON.stringify(response));
-    //     }
-    // );
+    WLAuthorizationManager.logout("EnrollmentUserLogin").then(
+        function () {
+            WLAuthorizationManager.logout("EnrollmentPinCode").then(
+                function() {
+                    WLAuthorizationManager.logout("isEnrolled").then(
+                        function() {
+                            var resourceRequest = new WLResourceRequest(
+                                "/adapters/Enrollment/deletePinCode/",
+                                WLResourceRequest.DELETE
+                            );
+                            
+                            resourceRequest.send().then(
+                                function() {
+                                    location.reload();
+                                },
+                                function(response) {
+                                    alert("Failed deleting pin code: " + JSON.stringify(response));
+                                }
+                            );
+                        },
+                        function(response) {
+                            alert("isEnrolled logout failed: " + JSON.stringify(response));
+                        }
+                    );
+                },
+                function(response) {
+                    alert("EnrollmentPinCode logout failed: " + JSON.stringify(response));
+                }
+            );
+        },
+        function(response) {
+            alert("EnrollmentUserLogin logout failed: " + JSON.stringify(response));
+        }
+    );
 }
