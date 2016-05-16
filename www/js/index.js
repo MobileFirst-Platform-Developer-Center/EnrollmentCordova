@@ -112,9 +112,14 @@ function isEnrolled() {
 }
 
 function enroll() {
+    var pinCode = "";
     WLAuthorizationManager.obtainAccessToken("setPinCode").then(
-        function () {       
-            var pinCode = prompt("Set a pin code", "");
+        function() {       
+            pinCode = prompt("Set a pin code", "");
+            while (pinCode === "") {
+                pinCode = prompt("You must set a pin code", "");
+            }
+        
             var resourceRequest = new WLResourceRequest(
                 "/adapters/Enrollment/setPinCode/" + pinCode,
                 WLResourceRequest.POST
