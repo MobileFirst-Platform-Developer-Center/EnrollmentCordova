@@ -13,15 +13,15 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-var UserLoginChallengeHandler = function() {
+var EnrollmentUserLoginChallengeHandler = function() {
     var isChallenged = false;
     var securityCheckName = 'EnrollmentUserLogin';
-    var userLoginChallengeHandler = WL.Client.createWLChallengeHandler(securityCheckName);
+    var enrollmentUserLoginChallengeHandler = WL.Client.createWLChallengeHandler(securityCheckName);
     
     document.getElementById("loginButton").addEventListener("click", login);
     
-    userLoginChallengeHandler.securityCheckName = securityCheckName;
-    userLoginChallengeHandler.handleChallenge = function(challenge) {
+    enrollmentUserLoginChallengeHandler.securityCheckName = securityCheckName;
+    enrollmentUserLoginChallengeHandler.handleChallenge = function(challenge) {
         WL.Logger.debug("handleChallenge");
         document.getElementById("appDiv").style.display = 'none';
         document.getElementById("loginDiv").style.display = 'block';
@@ -34,12 +34,12 @@ var UserLoginChallengeHandler = function() {
         document.getElementById("statusMsg").innerHTML = statusMsg;
     };
 
-    userLoginChallengeHandler.processSuccess = function(data) {
+    enrollmentUserLoginChallengeHandler.processSuccess = function(data) {
         WL.Logger.debug("processSuccess");
         isChallenged = false;
     };
 
-    userLoginChallengeHandler.handleFailure = function(error) {
+    enrollmentUserLoginChallengeHandler.handleFailure = function(error) {
         WL.Logger.debug("handleFailure: " + error.failure);
         isChallenged = false;
         if (error.failure !== null){
@@ -57,7 +57,7 @@ var UserLoginChallengeHandler = function() {
             return;
         }
         if (isChallenged){
-            userLoginChallengeHandler.submitChallengeAnswer({'username':username, 'password':password});
+            enrollmentUserLoginChallengeHandler.submitChallengeAnswer({'username':username, 'password':password});
         } else {
             WLAuthorizationManager.login(securityCheckName,{'username':username, 'password':password}).then(
                 function() {
@@ -69,5 +69,5 @@ var UserLoginChallengeHandler = function() {
         }
     }
 
-    return userLoginChallengeHandler;
+    return enrollmentUserLoginChallengeHandler;
 };
