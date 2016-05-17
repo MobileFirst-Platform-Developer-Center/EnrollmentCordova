@@ -97,7 +97,7 @@ function isEnrolled() {
         function(response) {
             document.getElementById("wrapper").style.display = 'block';
             document.getElementById("logoutButton").style.display = 'none';
-            document.getElementById("headerTitle").style.marginLeft = '57px';
+            document.getElementById("headerTitle").style.marginLeft = '79px';
             
             if (response.responseText == "true") {  
                 document.getElementById("getBalance").style.display = 'inline-block';
