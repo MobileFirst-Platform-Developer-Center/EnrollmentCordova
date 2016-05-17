@@ -123,7 +123,18 @@ function enroll() {
             }
             
             if (pinCode === null) {
-                logout();
+                WLAuthorizationManager.logout("EnrollmentUserLogin").then(
+                function() {
+                    WL.Logger.debug("Successfully logged out from EnrollmentUserLogin.");
+                    document.getElementById('username').value = "";
+                    document.getElementById('password').value = "";
+                    document.getElementById("loginDiv").style.display = 'none';
+                    document.getElementById("appDiv").style.display = 'block';
+                },
+                function(response) {
+                    WL.Logger.debug("Failed logging out from EnrollmentUserLogin: " + JSON.stringify(response));
+                }
+                );
             } else {
                 var resourceRequest = new WLResourceRequest(
                     "/adapters/Enrollment/setPinCode/" + pinCode,
@@ -154,37 +165,45 @@ function enroll() {
 function logout() {
     WLAuthorizationManager.logout("EnrollmentUserLogin").then(
         function () {
+            WL.Logger.debug ("Successfully logged-out from EnrollmentUserLogin.");
             WLAuthorizationManager.logout("EnrollmentPinCode").then(
                 function() {
-                    // WLAuthorizationManager.logout("isEnrolled").then(
-                    //     function() {
-                    //         var resourceRequest = new WLResourceRequest(
-                    //             "/adapters/Enrollment/deletePinCode/",
-                    //             WLResourceRequest.DELETE
-                    //         );
-                    //         
-                    //         resourceRequest.send().then(
-                    //             function() {
-                    //                 location.reload();
-                    //             },
-                    //             function(response) {
-                    //                 alert("Failed deleting pin code: " + JSON.stringify(response));
-                    //             }
-                    //         );
-                    //     },
-                    //     function(response) {
-                    //         alert("isEnrolled logout failed: " + JSON.stringify(response));
-                    //     }
-                    // );
-                    location.reload();
+                    WL.Logger.debug("Successfully logged-out from EnrollmentPinCode.");
+                    WLAuthorizationManager.logout("IsEnrolled").then(
+                        function() {
+                            WL.Logger.debug ("Successfully logged-out from IsEnrolled.");
+                            var resourceRequest = new WLResourceRequest(
+                                "/adapters/Enrollment/deletePinCode",
+                                WLResourceRequest.DELETE
+                            );
+                            
+                            resourceRequest.send().then(
+                                function() {
+                                    WL.Logger.debug ("Successfully deleted the pin code.");
+                                    document.getElementById('username').value = "";
+                                    document.getElementById('password').value = "";
+                                    document.getElementById("getBalance").style.display = 'none';
+                                    document.getElementById("getTransactions").style.display = 'none';
+                                    document.getElementById("enrollButton").style.display = 'block';
+                                    document.getElementById("logoutButton").style.display = 'none';
+                                },
+                                function(response) {
+                                    WL.Logger.debug("Failed deleting pin code: " + JSON.stringify(response));
+                                }
+                            );
+                        },
+                        function(response) {
+                            WL.Logger.debug("isEnrolled logout failed: " + JSON.stringify(response));
+                        }
+                    );
                 },
                 function(response) {
-                    alert("EnrollmentPinCode logout failed: " + JSON.stringify(response));
+                    WL.Logger.debug("EnrollmentPinCode logout failed: " + JSON.stringify(response));
                 }
             );
         },
         function(response) {
-            alert("EnrollmentUserLogin logout failed: " + JSON.stringify(response));
+            WL.Logger.debug("EnrollmentUserLogin logout failed: " + JSON.stringify(response));
         }
     );
 }
