@@ -1,33 +1,40 @@
-<!---Licensed Materials - Property of IBM
-5725-I43 (C) Copyright IBM Corp. 2015, 2016. All Rights Reserved.
-US Government Users Restricted Rights - Use, duplication or
-disclosure restricted by GSA ADP Schedule Contract with IBM Corp.-->
+IBM MobileFirst Platform Foundation
+===
+## EnrollmentCordova
+A sample application demonstrating Enrollment functionality.
 
-# IBM MobileFirst Platform Foundation Cordova Template
-This template serves as a simple hello world application for MobileFirst Cordova
+### Tutorials
+https://mobilefirstplatform.ibmcloud.com/tutorials/en/foundation/8.0/authentication-and-security/enrollment/
 
-Refer to the documentation links for more information.
+### Usage
 
-## Installation
-- Method 1: Add the template to a MobileFirst Cordova app by using the
-  "cordova create" command.
+1. Use either Maven or MobileFirst Developer CLI to [build and deploy the `Enrollment` adapter](https://mobilefirstplatform.ibmcloud.com/tutorials/en/foundation/8.0/adapters/creating-adapters/).
 
-Automatically add the plugin by creating a new Cordova project using the MobileFirst CLI create command:
+ The Enrollment Security Check adapter can be found in https://github.com/MobileFirst-Platform-Developer-Center/SecurityCheckAdapters/tree/release80.
 
-            cordova create projectName --template cordova-template-mfp
+2. From a command-line window, navigate to the project's root folder and run the commands:
+ - `cordova platform add` - to add a platform. 
+ - `mfpdev app register` - to register the application.
+ - `mfpdev app push` - to set the following scope mapings:
+    - `setPinCode` scope to `EnrollmentUserLogin` security check
+    - `accessRestricted` scope to `IsEnrolled` security check
+    - `transactionsPrivilege` scope to `EnrollmentPinCode` and `IsEnrolled` security checks
+ - `cordova run` - to run the application.
 
-## Supported Platforms
-- Android
-- iOS
-- Windows
+### Supported Levels
+IBM MobileFirst Platform Foundation 8.0
 
-## Documentation
+### License
+Copyright 2015 IBM Corp.
 
-See the IBM MobileFirst Platform Foundation section of IBM Knowledge Center:
-http://ibm.biz/knowctr#SSHS8R_8.0.0/wl_welcome.html
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-For using the template, see:
-http://ibm.biz/knowctr#SSHS8R_8.0.0/dev/t_using_mfp_template.html 
+http://www.apache.org/licenses/LICENSE-2.0
 
-For details of the changes in this latest release, see:
-http://www-01.ibm.com/support/docview.wss?uid=swg2C7000003
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
