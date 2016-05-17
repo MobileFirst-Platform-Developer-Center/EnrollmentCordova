@@ -33,8 +33,8 @@ function wlCommonInit(){
     document.getElementById("enrollButton").addEventListener("click", enroll);
     document.getElementById("logoutButton").addEventListener("click", logout);
 
-    var enrollmentUserLoginChallengeHandler = EnrollmentUserLoginChallengeHandler();
-    var enrollmentPinCodeChallengeHandler  = EnrollmentPinCodeChallengeHandler();
+    var userLoginChallengeHandler = UserLoginChallengeHandler();
+    var pinCodeChallengeHandler  = PinCodeChallengeHandler();
     
     isEnrolled();
 }
