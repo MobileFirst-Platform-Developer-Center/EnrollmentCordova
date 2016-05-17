@@ -128,6 +128,7 @@ function enroll() {
                     WL.Logger.debug("Successfully logged out from EnrollmentUserLogin.");
                     document.getElementById('username').value = "";
                     document.getElementById('password').value = "";
+                    document.getElementById('responseTextarea').value = "";
                     document.getElementById("loginDiv").style.display = 'none';
                     document.getElementById("appDiv").style.display = 'block';
                 },
@@ -182,6 +183,7 @@ function logout() {
                                     WL.Logger.debug ("Successfully deleted the pin code.");
                                     document.getElementById('username').value = "";
                                     document.getElementById('password').value = "";
+                                    document.getElementById('responseTextarea').value = "";
                                     document.getElementById("getBalance").style.display = 'none';
                                     document.getElementById("getTransactions").style.display = 'none';
                                     document.getElementById("enrollButton").style.display = 'block';
