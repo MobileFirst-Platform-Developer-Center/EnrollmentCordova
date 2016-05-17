@@ -121,25 +121,29 @@ function enroll() {
             while (pinCode === "") {
                 pinCode = prompt("You must set a pin code", "");
             }
-        
-            var resourceRequest = new WLResourceRequest(
-                "/adapters/Enrollment/setPinCode/" + pinCode,
-                WLResourceRequest.POST
-            );
             
-            resourceRequest.send().then(
-                function() {
-                    document.getElementById("loginDiv").style.display = 'none';
-                    document.getElementById("appDiv").style.display = 'block';
-                    document.getElementById("getBalance").style.display = 'inline-block';
-                    document.getElementById("getTransactions").style.display = 'inline-block';
-                    document.getElementById("enrollButton").style.display = 'none';
-                    document.getElementById("logoutButton").style.display = 'block';
-                },
-                function(response) {
-                    WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
-                }
-            );  
+            if (pinCode === null) {
+                logout();
+            } else {
+                var resourceRequest = new WLResourceRequest(
+                    "/adapters/Enrollment/setPinCode/" + pinCode,
+                    WLResourceRequest.POST
+                );
+                
+                resourceRequest.send().then(
+                    function() {
+                        document.getElementById("loginDiv").style.display = 'none';
+                        document.getElementById("appDiv").style.display = 'block';
+                        document.getElementById("getBalance").style.display = 'inline-block';
+                        document.getElementById("getTransactions").style.display = 'inline-block';
+                        document.getElementById("enrollButton").style.display = 'none';
+                        document.getElementById("logoutButton").style.display = 'block';
+                    },
+                    function(response) {
+                        WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
+                    }
+                );
+            }
         },
         function (response) {
             WL.Logger.debug("Failed requesting an access token:" + JSON.stringify(response));
@@ -152,26 +156,27 @@ function logout() {
         function () {
             WLAuthorizationManager.logout("EnrollmentPinCode").then(
                 function() {
-                    WLAuthorizationManager.logout("isEnrolled").then(
-                        function() {
-                            var resourceRequest = new WLResourceRequest(
-                                "/adapters/Enrollment/deletePinCode/",
-                                WLResourceRequest.DELETE
-                            );
-                            
-                            resourceRequest.send().then(
-                                function() {
-                                    location.reload();
-                                },
-                                function(response) {
-                                    alert("Failed deleting pin code: " + JSON.stringify(response));
-                                }
-                            );
-                        },
-                        function(response) {
-                            alert("isEnrolled logout failed: " + JSON.stringify(response));
-                        }
-                    );
+                    // WLAuthorizationManager.logout("isEnrolled").then(
+                    //     function() {
+                    //         var resourceRequest = new WLResourceRequest(
+                    //             "/adapters/Enrollment/deletePinCode/",
+                    //             WLResourceRequest.DELETE
+                    //         );
+                    //         
+                    //         resourceRequest.send().then(
+                    //             function() {
+                    //                 location.reload();
+                    //             },
+                    //             function(response) {
+                    //                 alert("Failed deleting pin code: " + JSON.stringify(response));
+                    //             }
+                    //         );
+                    //     },
+                    //     function(response) {
+                    //         alert("isEnrolled logout failed: " + JSON.stringify(response));
+                    //     }
+                    // );
+                    location.reload();
                 },
                 function(response) {
                     alert("EnrollmentPinCode logout failed: " + JSON.stringify(response));
