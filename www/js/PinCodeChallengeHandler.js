@@ -59,4 +59,6 @@ var PinCodeChallengeHandler = function() {
             alert("Unknown error");
         }
     };
+
+    return pinCodeChallengeHandler;
 };
