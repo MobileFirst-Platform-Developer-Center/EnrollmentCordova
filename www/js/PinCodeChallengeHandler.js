@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 var PinCodeChallengeHandler = function() {
-    pinCodeChallengeHandler = WL.Client.createWLChallengeHandler("EnrollmentPinCode");
+    var securityCheckName = 'EnrollmentPinCode';
+    pinCodeChallengeHandler = WL.Client.createWLChallengeHandler(securityCheckName);
 
     pinCodeChallengeHandler.handleChallenge = function(challenge) {
         var msg = "";
