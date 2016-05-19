@@ -27,7 +27,7 @@ var wlInitOptions = {
 
 // Called automatically after MFP framework initialization by WL.Client.init(wlInitOptions).
 function wlCommonInit(){
-    document.getElementById("getPublicData").addEventListener("click", getpublicData);
+    document.getElementById("getPublicData").addEventListener("click", getPublicData);
     document.getElementById("getBalance").addEventListener("click", getBalance);
     document.getElementById("getTransactions").addEventListener("click", getTransactions);
     document.getElementById("enrollButton").addEventListener("click", enroll);
@@ -39,7 +39,7 @@ function wlCommonInit(){
     isEnrolled();
 }
 
-function getpublicData() {
+function getPublicData() {
     var resourceRequest = new WLResourceRequest(
         "/adapters/Enrollment/publicData",
         WLResourceRequest.GET
