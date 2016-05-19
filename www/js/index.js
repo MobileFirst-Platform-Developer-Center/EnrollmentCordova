@@ -108,7 +108,7 @@ function isEnrolled() {
             }
         },
         function(response) {
-            WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
+            WL.Logger.debug("Error while checking for enrollment status: " + JSON.stringify(response));
         }
     );    
 }
