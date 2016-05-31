@@ -16,7 +16,7 @@
 var UserLoginChallengeHandler = function() {
     var isChallenged = false;
     var securityCheckName = 'EnrollmentUserLogin';
-    var userLoginChallengeHandler = WL.Client.createWLChallengeHandler(securityCheckName);
+    var userLoginChallengeHandler = WL.Client.createSecurityCheckChallengeHandler(securityCheckName);
     
     document.getElementById("loginButton").addEventListener("click", login);
     
@@ -34,7 +34,7 @@ var UserLoginChallengeHandler = function() {
         document.getElementById("statusMsg").innerHTML = statusMsg;
     };
 
-    userLoginChallengeHandler.processSuccess = function(data) {
+    userLoginChallengeHandler.handleSuccess = function(data) {
         WL.Logger.debug("processSuccess");
         isChallenged = false;
     };

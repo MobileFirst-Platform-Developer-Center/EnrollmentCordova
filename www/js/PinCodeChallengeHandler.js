@@ -15,7 +15,7 @@
  */
 var PinCodeChallengeHandler = function() {
     var securityCheckName = 'EnrollmentPinCode';
-    pinCodeChallengeHandler = WL.Client.createWLChallengeHandler(securityCheckName);
+    pinCodeChallengeHandler = WL.Client.createSecurityCheckChallengeHandler(securityCheckName);
 
     pinCodeChallengeHandler.handleChallenge = function(challenge) {
         var msg = "";
@@ -38,8 +38,8 @@ var PinCodeChallengeHandler = function() {
             pinCodeChallengeHandler.submitChallengeAnswer({
                 "pin": pinCode
             });
-        } else { // calling submitFailure in case user pressed the cancel button
-            pinCodeChallengeHandler.submitFailure();
+        } else { // calling cancel in case user pressed the cancel button
+            pinCodeChallengeHandler.cancel();
         }
 
 
