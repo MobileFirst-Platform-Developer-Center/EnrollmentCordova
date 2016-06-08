@@ -31,7 +31,7 @@ function wlCommonInit(){
     document.getElementById("getBalance").addEventListener("click", getBalance);
     document.getElementById("getTransactions").addEventListener("click", getTransactions);
     document.getElementById("enrollButton").addEventListener("click", enroll);
-    document.getElementById("logoutButton").addEventListener("click", logout);
+    document.getElementById("unenrollButton").addEventListener("click", unenroll);
 
     var userLoginChallengeHandler = UserLoginChallengeHandler();
     var pinCodeChallengeHandler  = PinCodeChallengeHandler();
@@ -41,7 +41,7 @@ function wlCommonInit(){
 
 function getPublicData() {
     var resourceRequest = new WLResourceRequest(
-        "/adapters/Enrollment/publicData",
+        "/adapters/ResourceAdapter/publicData",
         WLResourceRequest.GET
     );
 
@@ -57,7 +57,7 @@ function getPublicData() {
 
 function getBalance() {
     var resourceRequest = new WLResourceRequest(
-        "/adapters/Enrollment/balance",
+        "/adapters/ResourceAdapter/balance",
         WLResourceRequest.GET
     );
 
@@ -73,7 +73,7 @@ function getBalance() {
 
 function getTransactions() {
     var resourceRequest = new WLResourceRequest(
-        "/adapters/Enrollment/transactions",
+        "/adapters/ResourceAdapter/transactions",
         WLResourceRequest.GET
     );
 
@@ -96,13 +96,14 @@ function isEnrolled() {
     resourceRequest.send().then(
         function(response) {
             document.getElementById("wrapper").style.display = 'block';
-            document.getElementById("logoutButton").style.display = 'none';
+            document.getElementById("unenrollButton").style.display = 'none';
             document.getElementById("headerTitle").style.marginLeft = '79px';
             
             if (response.responseText == "true") {  
                 document.getElementById("getBalance").style.display = 'inline-block';
                 document.getElementById("getTransactions").style.display = 'inline-block';
-                document.getElementById("logoutButton").style.display = 'block';
+                document.getElementById("unenrollButton").style.display = 'block';
+                document.getElementById("helloUser").innerHTML = "Hello, " + localStorage.getItem("username");
             } else {
                 document.getElementById("enrollButton").style.display = 'block';
             }
@@ -115,6 +116,7 @@ function isEnrolled() {
 
 function enroll() {
     var pinCode = "";
+    document.getElementById("enrollButton").style.display = 'none';
     WLAuthorizationManager.obtainAccessToken("setPinCode").then(
         function() {       
             pinCode = prompt("Set a pin code", "");
@@ -131,6 +133,7 @@ function enroll() {
                     document.getElementById('responseTextarea').value = "";
                     document.getElementById("loginDiv").style.display = 'none';
                     document.getElementById("appDiv").style.display = 'block';
+                    document.getElementById("enrollButton").style.display = 'block';
                 },
                 function(response) {
                     WL.Logger.debug("Failed logging out from EnrollmentUserLogin: " + JSON.stringify(response));
@@ -143,13 +146,16 @@ function enroll() {
                 );
                 
                 resourceRequest.send().then(
-                    function() {
+                    function(response) {
+                        localStorage.setItem("username", response.responseJSON.userName);
+                        
                         document.getElementById("loginDiv").style.display = 'none';
                         document.getElementById("appDiv").style.display = 'block';
                         document.getElementById("getBalance").style.display = 'inline-block';
                         document.getElementById("getTransactions").style.display = 'inline-block';
                         document.getElementById("enrollButton").style.display = 'none';
-                        document.getElementById("logoutButton").style.display = 'block';
+                        document.getElementById("unenrollButton").style.display = 'block';
+                        document.getElementById("helloUser").innerHTML = "Hello, " + localStorage.getItem("username");
                     },
                     function(response) {
                         WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
@@ -163,9 +169,26 @@ function enroll() {
     );
 }
 
+function unenroll() {
+    var resourceRequest = new WLResourceRequest(
+        "/adapters/Enrollment/unenroll",
+        WLResourceRequest.DELETE
+    );
+    
+    resourceRequest.send().then(
+        function() {
+            WL.Logger.debug ("Successfully deleted the pin code.");
+            logout();
+        },
+        function(response) {
+            WL.Logger.debug("Failed deleting pin code: " + JSON.stringify(response));
+        }
+    );
+}
+
 function logout() {
     WLAuthorizationManager.logout("EnrollmentUserLogin").then(
-        function () {
+        function() {
             WL.Logger.debug ("Successfully logged-out from EnrollmentUserLogin.");
             WLAuthorizationManager.logout("EnrollmentPinCode").then(
                 function() {
@@ -173,26 +196,14 @@ function logout() {
                     WLAuthorizationManager.logout("IsEnrolled").then(
                         function() {
                             WL.Logger.debug ("Successfully logged-out from IsEnrolled.");
-                            var resourceRequest = new WLResourceRequest(
-                                "/adapters/Enrollment/deletePinCode",
-                                WLResourceRequest.DELETE
-                            );
-                            
-                            resourceRequest.send().then(
-                                function() {
-                                    WL.Logger.debug ("Successfully deleted the pin code.");
-                                    document.getElementById('username').value = "";
-                                    document.getElementById('password').value = "";
-                                    document.getElementById('responseTextarea').value = "";
-                                    document.getElementById("getBalance").style.display = 'none';
-                                    document.getElementById("getTransactions").style.display = 'none';
-                                    document.getElementById("enrollButton").style.display = 'block';
-                                    document.getElementById("logoutButton").style.display = 'none';
-                                },
-                                function(response) {
-                                    WL.Logger.debug("Failed deleting pin code: " + JSON.stringify(response));
-                                }
-                            );
+                            document.getElementById('username').value = "";
+                            document.getElementById('password').value = "";
+                            document.getElementById('responseTextarea').value = "";
+                            document.getElementById("getBalance").style.display = 'none';
+                            document.getElementById("getTransactions").style.display = 'none';
+                            document.getElementById("enrollButton").style.display = 'block';
+                            document.getElementById("unenrollButton").style.display = 'none';
+                            document.getElementById("helloUser").innerHTML = 'Hello, Guest';
                         },
                         function(response) {
                             WL.Logger.debug("isEnrolled logout failed: " + JSON.stringify(response));
