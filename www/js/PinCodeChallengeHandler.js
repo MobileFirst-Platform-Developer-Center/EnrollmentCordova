@@ -52,6 +52,9 @@ var PinCodeChallengeHandler = function() {
         if (error.failure !== null && error.failure !== undefined) {
             if (error.failure == "Account blocked") {
                 enroll();
+                document.getElementById("unenrollButton").style.display = 'none';
+                document.getElementById("username").value = "";
+                document.getElementById("password").value = "";
             } else {
                 alert("Error:" + JSON.stringify(error.failure));
             }

@@ -134,6 +134,9 @@ function enroll() {
                     document.getElementById("loginDiv").style.display = 'none';
                     document.getElementById("appDiv").style.display = 'block';
                     document.getElementById("enrollButton").style.display = 'block';
+                    document.getElementById("helloUser").innerHTML = "Hello, Guest";
+                    document.getElementById("getTransactions").style.display = 'none';
+                    document.getElementById("getBalance").style.display = 'none';
                 },
                 function(response) {
                     WL.Logger.debug("Failed logging out from EnrollmentUserLogin: " + JSON.stringify(response));
