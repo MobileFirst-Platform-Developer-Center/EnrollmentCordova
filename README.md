@@ -18,7 +18,8 @@ https://mobilefirstplatform.ibmcloud.com/tutorials/en/foundation/8.0/authenticat
  - `mfpdev app push` - to set the following scope mapings:
     - `setPinCode` scope to `EnrollmentUserLogin` security check
     - `accessRestricted` scope to `IsEnrolled` security check
-    - `transactionsPrivilege` scope to `EnrollmentPinCode` and `IsEnrolled` security checks
+    - `unenroll` scope to `IsEnrolled` security check
+    - `transactions` scope to `EnrollmentPinCode` and `IsEnrolled` security checks
  - `cordova run` - to run the application.
 
 ### Supported Levels
