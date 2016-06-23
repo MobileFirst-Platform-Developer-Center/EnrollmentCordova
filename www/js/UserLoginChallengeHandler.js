@@ -34,7 +34,8 @@ var UserLoginChallengeHandler = function() {
         document.getElementById("statusMsg").innerHTML = statusMsg;
     };
 
-    userLoginChallengeHandler.handleSuccess = function(data) {
+    userLoginChallengeHandler.handleSuccess = function(response) {
+        displayName = response.user.displayName;
         WL.Logger.debug("processSuccess");
         isChallenged = false;
     };
