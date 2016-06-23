@@ -21,5 +21,5 @@ var IsEnrolledChallengeHandler = function() {
         displayName = response.user.displayName;
     };
 
-    return pinCodeChallengeHandler;
+    return IsEnrolledChallengeHandler;
 };
