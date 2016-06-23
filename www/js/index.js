@@ -25,6 +25,8 @@ var wlInitOptions = {
     // For initialization options please refer to IBM MobileFirst Platform Foundation Knowledge Center.
 };
 
+var displayName;
+
 // Called automatically after MFP framework initialization by WL.Client.init(wlInitOptions).
 function wlCommonInit(){
     document.getElementById("getPublicData").addEventListener("click", getPublicData);
@@ -35,6 +37,7 @@ function wlCommonInit(){
 
     var userLoginChallengeHandler = UserLoginChallengeHandler();
     var pinCodeChallengeHandler  = PinCodeChallengeHandler();
+    var isEnrolledChallengeHandler  = IsEnrolledChallengeHandler();
     
     isEnrolled();
 }
@@ -88,30 +91,23 @@ function getTransactions() {
 }
 
 function isEnrolled() {
-    var resourceRequest = new WLResourceRequest(
-        "/adapters/Enrollment/isEnrolled/",
-        WLResourceRequest.GET
-    );
-    
-    resourceRequest.send().then(
+    WLAuthorizationManager.obtainAccessToken("IsEnrolled").then(
+        function() {
+            document.getElementById("wrapper").style.display = 'block';
+            document.getElementById("getBalance").style.display = 'inline-block';
+            document.getElementById("getTransactions").style.display = 'inline-block';
+            document.getElementById("unenrollButton").style.display = 'block';
+            document.getElementById("helloUser").innerHTML = "Hello, " + displayName;
+        },
         function(response) {
             document.getElementById("wrapper").style.display = 'block';
             document.getElementById("unenrollButton").style.display = 'none';
             document.getElementById("headerTitle").style.marginLeft = '79px';
-            
-            if (response.responseText == "true") {  
-                document.getElementById("getBalance").style.display = 'inline-block';
-                document.getElementById("getTransactions").style.display = 'inline-block';
-                document.getElementById("unenrollButton").style.display = 'block';
-                document.getElementById("helloUser").innerHTML = "Hello, " + localStorage.getItem("username");
-            } else {
-                document.getElementById("enrollButton").style.display = 'block';
-            }
-        },
-        function(response) {
+            document.getElementById("enrollButton").style.display = 'block';
             WL.Logger.debug("Error while checking for enrollment status: " + JSON.stringify(response));
+            
         }
-    );    
+    );  
 }
 
 function enroll() {
@@ -149,16 +145,14 @@ function enroll() {
                 );
                 
                 resourceRequest.send().then(
-                    function(response) {
-                        localStorage.setItem("username", response.responseJSON.userName);
-                        
+                    function() {
                         document.getElementById("loginDiv").style.display = 'none';
                         document.getElementById("appDiv").style.display = 'block';
                         document.getElementById("getBalance").style.display = 'inline-block';
                         document.getElementById("getTransactions").style.display = 'inline-block';
                         document.getElementById("enrollButton").style.display = 'none';
                         document.getElementById("unenrollButton").style.display = 'block';
-                        document.getElementById("helloUser").innerHTML = "Hello, " + localStorage.getItem("username");
+                        document.getElementById("helloUser").innerHTML = "Hello, " + displayName;
                     },
                     function(response) {
                         WL.Logger.debug("Error writing public data: " + JSON.stringify(response));
