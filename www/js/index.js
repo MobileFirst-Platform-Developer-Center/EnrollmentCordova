@@ -102,7 +102,7 @@ function isEnrolled() {
         function(response) {
             document.getElementById("wrapper").style.display = 'block';
             document.getElementById("unenrollButton").style.display = 'none';
-            document.getElementById("headerTitle").style.marginLeft = '79px';
+            document.getElementById("headerTitle").style.marginLeft = '65px';
             document.getElementById("enrollButton").style.display = 'block';
             WL.Logger.debug("Error while checking for enrollment status: " + JSON.stringify(response));
             
