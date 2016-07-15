@@ -56,10 +56,10 @@ var PinCodeChallengeHandler = function() {
                 document.getElementById("username").value = "";
                 document.getElementById("password").value = "";
             } else {
-                alert("Error:" + JSON.stringify(error.failure));
+                navigator.notification.alert("Error:" + JSON.stringify(error.failure));
             }
         } else {
-            alert("Unknown error");
+            navigator.notification.alert("Unknown error");
         }
     };
 
