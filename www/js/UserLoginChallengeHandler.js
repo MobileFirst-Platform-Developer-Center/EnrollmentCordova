@@ -44,9 +44,9 @@ var UserLoginChallengeHandler = function() {
         WL.Logger.debug("handleFailure: " + error.failure);
         isChallenged = false;
         if (error.failure !== null){
-            navigator.notification.alert(error.failure);
+            alert(error.failure);
         } else {
-            navigator.notification.alert("Failed to login.");
+            alert("Failed to login.");
         }
     };
 
@@ -54,7 +54,7 @@ var UserLoginChallengeHandler = function() {
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
         if (username === "" || password === ""){
-            navigator.notification.alert("Username and password are required");
+            alert("Username and password are required");
             return;
         }
         if (isChallenged){
